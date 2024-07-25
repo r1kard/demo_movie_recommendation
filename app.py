@@ -1,6 +1,7 @@
 import pickle
 import streamlit as st
 import requests
+import gzip
 
 APIKEY=st.secrets["APIKEY"]
 
@@ -30,8 +31,11 @@ def recommend(movie):
     return recommended_movies_name, recommendend_movies_poster
 
 st.header("Sistema de Recomendacion de Películas con Machine Learning")
-movies = pickle.load(open('instances/movie_list.pkl','rb'))
-similarity = pickle.load(open('instances/similarity.pkl','rb'))
+with gzip.open('matrices/movie_list.pkl.gz', 'rb') as f:
+    movies = pickle.load(f)
+
+with gzip.open('matrices/similarity.pkl.gz', 'rb') as f:
+    similarity = pickle.load(f)
 
 movie_list = movies['title']
 selected_movie=st.selectbox(
